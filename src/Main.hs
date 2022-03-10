@@ -18,8 +18,7 @@ colorAll :: [Curve] -> ColorFn
 colorAll = foldMap color
 tattoo :: Image RPU X Bit
 tattoo =
-  let width = 4000
-      height = 2000
+  let (width, height) = (4000, 2000)
       halfHeight = height / 2
       photoNegate = Graphics.Image.map (fmap (bool2bit . not . bit2bool))
    in photoNegate . makeImage (height, width) . unColorFn . colorAll $
@@ -27,7 +26,7 @@ tattoo =
 harmonics :: [Curve]
 harmonics = foldr (zipWith ($)) sines [alternated, yScaled, xScaled]
  where
-  sines = (repeat . Curve) (negate . sin)
+  sines = (repeat . Curve) sin
   (yScaled, xScaled) = unzip $ (scaleX &&& scaleY) . (1 /) <$> [1 ..]
   alternated = scaleY <$> cycle [1, -1]
 translateY :: Double -> Curve -> Curve
